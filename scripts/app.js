@@ -5,24 +5,35 @@ function init(){
 
     const cells = []
     const numbers = []
-    const gridSize = 5; // 5x5 grid
+    const gridSize = 12; // 5x5 grid
     const check = [-gridSize - 1, -gridSize , -gridSize + 1, -1 , 1 , gridSize - 1 , gridSize , gridSize + 1]
     
     const cellSize = 50; // Size of each cell 
     const numberOfCells = gridSize * gridSize;
+
     const flagBtn = document.querySelector('#flag');
     const restartBtn = document.querySelector('#restart')
+    const howToPlay = document.querySelector('#howToPlay')
+    const howToPlayClose = document.querySelector('#close')
+    const container = document.querySelector('#model-container')
+
+    howToPlay.addEventListener('click', () => {
+        container.classList.add('show')
+    })
+
+    howToPlayClose.addEventListener('click', () => {
+        container.classList.remove('show')
+    })
+
 
     // let mineCount = 0;
-    let numberOfMines = 2; 
+    let numberOfMines =1; 
     let flag = false; 
     let won = false;
-
     flagBtn.addEventListener('click', useFlag);
     restartBtn.addEventListener('click', function() {
         location.reload();
     });
-
 //---------------------------------------------------- FUNCTIONS ----------------------------------------------------------\\
 
 //create a grid
@@ -34,7 +45,7 @@ function createGrid(){
         cell.addEventListener('click', handelClick);
         
         cells.push(cell);
-        gridElem.appendChild(cell); 
+        gridElem.appendChild(cell);
         cell.id = x;
     }
 }
@@ -67,7 +78,7 @@ function handelClick(event) {
         //lose condition
         else {
             if (event.target.classList.contains('mine')) {
-                messageElem.textContent = 'Game Over! You clicked a mine.'; 
+                messageElem.textContent = 'You clicked a mine (•˕ •マ.ᐟ'; 
                 // document.querySelectorAll('.mine').forEach((e)=> e.style.backgroundImage = "url('assets/360_F_170082488_Tcd6GqID2P20dCg5GEv5PniLdvi036YM.jpg')")
                 return;
             }
@@ -87,7 +98,7 @@ function handelClick(event) {
                 return number.classList.contains('unlocked')
             }) 
             console.log(won)
-            if (won) messageElem.textContent = "YOU WON" 
+            if (won) messageElem.textContent = "YOU WON ദ്ദി(• ˕ •マ.ᐟ" 
         }
 }
 
