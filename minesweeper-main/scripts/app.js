@@ -1,22 +1,44 @@
 function init(){
 
+//---------------------------------------------------- Cached Element References ----------------------------------------------------------\\
+
     const gridElem = document.querySelector('.grid');
-    const massageElem = document.querySelector('#message');
-
-    const cells = []
-    const check = [-1,-6,-5,-4,1,6,5,4]
-    const gridSize = 5; // 5x5 grid
-    const cellSize = 60; // Size of each cell 
-    const numberOfCells = gridSize * gridSize;
+    const messageElem = document.querySelector('#message');
     const flagBtn = document.querySelector('#flag');
+    const restartBtn = document.querySelector('#restart')
+    const howToPlay = document.querySelector('#howToPlay')
+    const howToPlayClose = document.querySelector('#close')
+    const container = document.querySelector('#model-container')
 
-    // let mineCount = 0;
-    let numberOfMines = 5; 
+//---------------------------------------------------- Constants ----------------------------------------------------------\\
+
+    let gridSize = 15; // 5x5 grid
+    const cellSize = 35; // Size of each cell 
+    const numberOfCells = gridSize * gridSize;
+    const cells = []
+    const numbers = []
+    const check = [-gridSize - 1, -gridSize , -gridSize + 1, -1 , 1 , gridSize - 1 , gridSize , gridSize + 1]
+
+//---------------------------------------------------- Variables ----------------------------------------------------------\\
+
+    let numberOfMines = 45; 
     let flag = false; 
+    let won = false;
+    let gameOver = false;
 
+//---------------------------------------------------- Event Listeners ----------------------------------------------------------\\
+
+    howToPlay.addEventListener('click', () => {
+        container.classList.add('show') 
+    })
+    howToPlayClose.addEventListener('click', () => {
+        container.classList.remove('show') 
+    })
     flagBtn.addEventListener('click', useFlag);
-
-//---------------------------------------------- FUNCTIONS ---------------------------------------------\\
+    restartBtn.addEventListener('click', function() {
+        location.reload();
+    });
+//---------------------------------------------------- FUNCTIONS ----------------------------------------------------------\\
 
 //create a grid
 function createGrid(){
@@ -25,11 +47,10 @@ function createGrid(){
         cell.style.width = `${cellSize}px`; 
         cell.style.height = `${cellSize}px`; 
         cell.addEventListener('click', handelClick);
-        
+
         cells.push(cell);
-        gridElem.appendChild(cell); 
+        gridElem.appendChild(cell);
         cell.id = x;
-        cell.textContent = x
     }
 }
 
@@ -39,7 +60,7 @@ function createMines() {
     while (mineCount < numberOfMines) { 
         let randomNumber = Math.floor(Math.random() * numberOfCells);
         const cell = cells[randomNumber];
-        if (cell.classList.contains('mine')) mineCount-- //if the cell already has a mine dont count it
+        if (cell.classList.contains('mine')) continue //if the cell already has a mine dont count it
         cell.classList.add('mine');
         mineCount++;
     }
@@ -48,6 +69,10 @@ function createMines() {
 //flag button 
 function useFlag(){
     flag = !flag
+    if (flag)
+        flagBtn.style.backgroundColor = 'grey';
+    else
+        flagBtn.style.backgroundColor = '#121524';
 }
 
 //adjusting grid size based on number/ size of cells
@@ -56,28 +81,56 @@ function useFlag(){
 
 //handle click
 function handelClick(event) {
+    if (gameOver) return;
+    if (flag) event.target.classList.toggle('flagged');
+        //lose condition
+        else {
+            if (event.target.classList.contains('mine')) {
+                gameOver = true;
+                messageElem.textContent = 'You clicked a mine (•˕ •マ.ᐟ';
+                //display the bomb pic
+                document.querySelectorAll('.mine').forEach((e)=> e.style.backgroundImage = "url('assets/360_F_170082488_Tcd6GqID2P20dCg5GEv5PniLdvi036YM.jpg')")
+                return;
+            }
 
-    if (flag) event.target.classList.toggle ('flagged');
-    else {
-        if (event.target.classList.contains('mine')){
-            massageElem.textContent = 'Game Over! You clicked a mine.'; //LOSE
-           // document.querySelectorAll('.mine').forEach((e)=> e.style.backgroundImage = "url('assets/360_F_170082488_Tcd6GqID2P20dCg5GEv5PniLdvi036YM.jpg')")
+            if (event.target.classList.contains('flagged'))
+                return;
+
+            event.target.classList.add('unlocked')
+            const position = Number(event.target.id)
+            const neighbors = nextGrids(position)
+            const bombs = checkBombs(neighbors)
+
+            if (bombs === 0) 
+                unlock(neighbors)
+            else 
+                event.target.textContent = bombs;
+
+            // win condition
+            won = numbers.every(number => {
+                return number.classList.contains('unlocked')
+            }) 
+            if (won){
+                gameOver = true;
+                messageElem.textContent = "YOU WON ദ്ദി(• ˕ •マ.ᐟ" 
+            } 
         }
-        const position = Number(event.target.id)
-        const neighbors = nextGrids(position)
-        console.log(neighbors)
-        const bombs = checkBombs(neighbors)
-        if (bombs === 0) unlock(neighbors)
-            else event.target.textContent = bombs;
-    }
 }
 
 //get an array of the ids of the grids next to the clicked one
 function nextGrids(num){
     let localNeighbors = []
+    const place = num % gridSize
     for (let i = 0; i < check.length; i++){ 
-    let newNum = Number(num) - check[i]
-    localNeighbors.push(newNum) }
+        const checkNum = check[i]
+        let newNum = Number(num) + checkNum
+        if (newNum < 0 || newNum >= numberOfCells ) continue
+
+        const newPlace = newNum % gridSize
+
+        if (Math.abs(newPlace - place) > 1) continue
+        localNeighbors.push(newNum)
+    }   
     return localNeighbors;
 }
 
@@ -87,27 +140,36 @@ function checkBombs(neighbors){
 
     neighbors.forEach (n => {
         const cell = cells [n]; 
-        if (n > 24 || n < 0) return
+        if (n >= numberOfCells || n < 0) return
         if (cell && cell.classList.contains('mine')) numberOfBombs++;
     })
     return numberOfBombs
 }
 
 function unlock(neighbors){
-        console.log(neighbors)
         neighbors.forEach (n => {
         const cell = cells [n]; 
-        console.log(cell.classList)
-        if (cell.classList.contains('unlocked')) return;
+
+        if (cell.classList.contains('unlocked')||cell.classList.contains('flagged')) return;
         cell.classList.add('unlocked')
-            const next = nextGrids(n)
-            const bombs = checkBombs(next)
-            if (bombs === 0){
+        const next = nextGrids(n)
+        const bombs = checkBombs(next)
+        if (bombs === 0)
             unlock (next)
-        }
+        else 
+            cell.textContent = bombs
     })
     }
 
+function notBombs(){
+    cells.forEach (x => {
+        if (! x.classList.contains('mine'))
+            numbers.push(x)
+    })
+}
+
 createGrid();
 createMines(); 
-}document.addEventListener("DOMContentLoaded", init);
+notBombs();
+
+} document.addEventListener("DOMContentLoaded", init);
