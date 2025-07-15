@@ -22,7 +22,8 @@ function init(){
     restartBtn.addEventListener('click', function() {
         location.reload();
     });
-//---------------------------------------------- FUNCTIONS ---------------------------------------------\\
+
+//---------------------------------------------------- FUNCTIONS ----------------------------------------------------------\\
 
 //create a grid
 function createGrid(){
@@ -61,7 +62,14 @@ function useFlag(){
 
 //handle click
 function handelClick(event) {
-
+    console.log(numbers)
+    let won = numbers.every(number =>{
+        console.log(number.className)
+        console.log(number.classList.contains('unlocked'))
+        return number.classList.contains('unlocked')
+    }) //false
+    console.log(won)
+    if (won) messageElem.textContent = "YOU WON" //WIN
     if (flag) event.target.classList.toggle ('flagged');
     else {
         if (event.target.classList.contains('mine')){
@@ -123,22 +131,15 @@ function unlock(neighbors){
     })
     }
 
-function restart(){
-
-}
-
 function notBombs(){
     cells.forEach (x => {
         if (! x.classList.contains('mine'))
             numbers.push(x)
     })
 }
-//winning condition
-// let winning = numbers.every(number => number.classList.contains('unlocked'))
-if (numbers.every(number => number.classList.contains('unlocked'))) messageElem.textContent = "YOU WON"
 
 createGrid();
 createMines(); 
 notBombs();
-// win();
+
 } document.addEventListener("DOMContentLoaded", init);
