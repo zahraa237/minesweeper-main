@@ -16,7 +16,7 @@ function init(){
     // let mineCount = 0;
     let numberOfMines = 2; 
     let flag = false; 
-    let gameOver = false;
+    let won = false;
 
     flagBtn.addEventListener('click', useFlag);
     restartBtn.addEventListener('click', function() {
@@ -61,29 +61,34 @@ function useFlag(){
     gridElem.style.height = `${gridSize * cellSize}px`; 
 
 //handle click
+
 function handelClick(event) {
-    console.log(numbers)
-    let won = numbers.every(number =>{
-        console.log(number.className)
-        console.log(number.classList.contains('unlocked'))
-        return number.classList.contains('unlocked')
-    }) //false
-    console.log(won)
-    if (won) messageElem.textContent = "YOU WON" //WIN
-    if (flag) event.target.classList.toggle ('flagged');
-    else {
-        if (event.target.classList.contains('mine')){
-            messageElem.textContent = 'Game Over! You clicked a mine.'; //LOSE
-           // document.querySelectorAll('.mine').forEach((e)=> e.style.backgroundImage = "url('assets/360_F_170082488_Tcd6GqID2P20dCg5GEv5PniLdvi036YM.jpg')")
-        }
-        event.target.classList.add ('unlocked')
-        const position = Number(event.target.id)
-        const neighbors = nextGrids(position)
-        console.log(neighbors)
-        const bombs = checkBombs(neighbors)
-        if (bombs === 0) unlock(neighbors)
+    if (flag) event.target.classList.toggle('flagged');
+        //lose condition
+        else {
+            if (event.target.classList.contains('mine')) {
+                messageElem.textContent = 'Game Over! You clicked a mine.'; 
+                // document.querySelectorAll('.mine').forEach((e)=> e.style.backgroundImage = "url('assets/360_F_170082488_Tcd6GqID2P20dCg5GEv5PniLdvi036YM.jpg')")
+                return;
+            }
+            if (event.target.classList.contains('flagged')) return;
+            event.target.classList.add('unlocked')
+            const position = Number(event.target.id)
+            const neighbors = nextGrids(position)
+            console.log(neighbors)
+            const bombs = checkBombs(neighbors)
+            if (bombs === 0) unlock(neighbors)
             else event.target.textContent = bombs;
-    }
+
+            // win condition
+            won = numbers.every(number => {
+                console.log(number.className)
+                console.log(number.classList.contains('unlocked'))
+                return number.classList.contains('unlocked')
+            }) 
+            console.log(won)
+            if (won) messageElem.textContent = "YOU WON" 
+        }
 }
 
 //get an array of the ids of the grids next to the clicked one
@@ -116,18 +121,16 @@ function checkBombs(neighbors){
 }
 
 function unlock(neighbors){
-        console.log(neighbors)
+        // console.log(neighbors)
         neighbors.forEach (n => {
         const cell = cells [n]; 
-        console.log(cell.classList)
-        if (cell.classList.contains('unlocked')) return;
+        // console.log(cell.classList)
+        if (cell.classList.contains('unlocked')||cell.classList.contains('flagged')) return;
         cell.classList.add('unlocked')
-            const next = nextGrids(n)
-            const bombs = checkBombs(next)
-            if (bombs === 0){
-            unlock (next)}
-            else {
-                cell.textContent = bombs}
+        const next = nextGrids(n)
+        const bombs = checkBombs(next)
+        if (bombs === 0) unlock (next)
+            else cell.textContent = bombs
     })
     }
 
