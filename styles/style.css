@@ -1,0 +1,46 @@
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+#message {
+  margin-top: 15px;
+  font-size: 18px;
+  height: 24px;
+}
+
+.grid{
+    width: auto;
+    height: auto;
+    border: 1px solid black;
+    display:flex;
+    flex-wrap: wrap;
+}
+
+.grid div{
+    width: auto;
+    height: auto;
+    border: 1px solid black;
+    box-sizing: border-box;
+}
+.mine{
+    background-image: url('../assets/360_F_170082488_Tcd6GqID2P20dCg5GEv5PniLdvi036YM.jpg');
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+.flagged{
+    background-image: url('../assets/red-triangulat-flag-vector-emoji-260nw-2225210403.jpg');
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.unlocked {
+    background-color: #e0e0e0;
+    border: 2px solid #ccc;
+    box-shadow: inset 1px 1px 2px rgba(0,0,0,0.2);
+}
+div {
+    /* text-align: center; */
+}
