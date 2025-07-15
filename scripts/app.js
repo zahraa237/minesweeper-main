@@ -1,7 +1,7 @@
 function init(){
 
     const gridElem = document.querySelector('.grid');
-    const massageElem = document.querySelector('#message');
+    const messageElem = document.querySelector('#message');
 
     const cells = []
     const numbers = []
@@ -11,6 +11,7 @@ function init(){
     const cellSize = 50; // Size of each cell 
     const numberOfCells = gridSize * gridSize;
     const flagBtn = document.querySelector('#flag');
+    const restartBtn = document.querySelector('#restart')
 
     // let mineCount = 0;
     let numberOfMines = 2; 
@@ -18,7 +19,9 @@ function init(){
     let gameOver = false;
 
     flagBtn.addEventListener('click', useFlag);
-
+    restartBtn.addEventListener('click', function() {
+        location.reload();
+    });
 //---------------------------------------------- FUNCTIONS ---------------------------------------------\\
 
 //create a grid
@@ -62,7 +65,7 @@ function handelClick(event) {
     if (flag) event.target.classList.toggle ('flagged');
     else {
         if (event.target.classList.contains('mine')){
-            massageElem.textContent = 'Game Over! You clicked a mine.'; //LOSE
+            messageElem.textContent = 'Game Over! You clicked a mine.'; //LOSE
            // document.querySelectorAll('.mine').forEach((e)=> e.style.backgroundImage = "url('assets/360_F_170082488_Tcd6GqID2P20dCg5GEv5PniLdvi036YM.jpg')")
         }
         event.target.classList.add ('unlocked')
@@ -116,10 +119,13 @@ function unlock(neighbors){
             if (bombs === 0){
             unlock (next)}
             else {
-                event.target.classList.add('unlocked');
                 cell.textContent = bombs}
     })
     }
+
+function restart(){
+
+}
 
 function notBombs(){
     cells.forEach (x => {
@@ -127,8 +133,12 @@ function notBombs(){
             numbers.push(x)
     })
 }
+//winning condition
+// let winning = numbers.every(number => number.classList.contains('unlocked'))
+if (numbers.every(number => number.classList.contains('unlocked'))) messageElem.textContent = "YOU WON"
 
 createGrid();
 createMines(); 
 notBombs();
+// win();
 } document.addEventListener("DOMContentLoaded", init);
