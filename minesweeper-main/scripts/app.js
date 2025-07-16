@@ -1,5 +1,5 @@
 function init(){
-
+// Minesweeper
 //---------------------------------------------------- Cached Element References ----------------------------------------------------------\\
 
     const gridElem = document.querySelector('.grid');

@@ -1,4 +1,4 @@
-# Project 1: 'Pupper'
+# Project 1: 'Minesweeper'
 
 ## Introduction
 
@@ -11,6 +11,7 @@ I chose to build minesweeper for my project 1 at General Assembly Software Engin
 * [Technologies](#Technologies)
 * [Grid Design](#Grid-Design)
 * [Game Mechanics](#Game-Mechanics)
+* [Adding the bombs](#Adding-the-bombs)
   * [clicking squares](#clicking-squares)
   * [Losing](#Loss-Logic)
   * [Winning](#Win-Logic)
