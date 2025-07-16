@@ -82,19 +82,20 @@ function useFlag(){
 //handle click
 function handelClick(event) {
     if (gameOver) return;
-    if (flag) event.target.classList.toggle('flagged');
-        //lose condition
+    if (flag) {
+        event.target.classList.toggle('flagged')
+        return;
+    }
+        if (event.target.classList.contains('flagged')) return
+        // lose condition
         else {
             if (event.target.classList.contains('mine')) {
-                gameOver = true;
-                messageElem.textContent = 'You clicked a mine (•˕ •マ.ᐟ';
-                //display the bomb pic
-                document.querySelectorAll('.mine').forEach((e)=> e.style.backgroundImage = "url('assets/360_F_170082488_Tcd6GqID2P20dCg5GEv5PniLdvi036YM.jpg')")
-                return;
+                    gameOver = true;
+                    messageElem.textContent = 'You clicked a mine (•˕ •マ.ᐟ';
+                    //display the bomb pic
+                    document.querySelectorAll('.mine').forEach((e)=> e.style.backgroundImage = "url('assets/360_F_170082488_Tcd6GqID2P20dCg5GEv5PniLdvi036YM.jpg')")
+                    return; 
             }
-
-            if (event.target.classList.contains('flagged'))
-                return;
 
             event.target.classList.add('unlocked')
             const position = Number(event.target.id)
