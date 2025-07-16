@@ -2,7 +2,7 @@
 
 ## Introduction
 
-I chose to build minesweeper for my project 1 at General Assembly Software Engineering Bootcamp. it is a very fun game and i had so much building it
+I chose to build minesweeper for my project 1 at General Assembly Software Engineering Bootcamp. which you can play [here](https://zahraa237.github.io/minesweeper-main/). it is a very fun game and i had so much building it
 
 ## Contents
 * [Introduction](#Introduction)
