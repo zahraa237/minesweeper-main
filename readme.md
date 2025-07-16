@@ -29,7 +29,7 @@ guide a family of dogs across a zombie highway, and live train tracks to their h
 * JavaScript
 * Git
 
-![board for minesweeper](minesweeper-main/assets/Screenshot%202025-07-16%20104156.png)
+![board for minesweeper](assets/Screenshot%202025-07-16%20104156.png)
 
 ## Grid Design
 
