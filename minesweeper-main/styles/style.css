@@ -37,7 +37,6 @@ body {
 
 }
 .mine{
-    /* background-image: url('../assets/360_F_170082488_Tcd6GqID2P20dCg5GEv5PniLdvi036YM.jpg'); */
     background-size: contain;
     background-repeat: no-repeat;
 }
@@ -81,7 +80,6 @@ button{
 
 .model{
     border-radius: 5px;
-    /* padding:10px 10px; */
     width:600px;
     text-align: center;
     background-color: #7891af;

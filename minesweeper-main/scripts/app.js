@@ -147,7 +147,7 @@ function checkBombs(neighbors){
     return numberOfBombs
 }
 
-function unlock(neighbors){
+function unlock(neighbors) {
         neighbors.forEach (n => {
         const cell = cells [n]; 
 
@@ -160,7 +160,7 @@ function unlock(neighbors){
         else 
             cell.textContent = bombs
     })
-    }
+}
 
 function notBombs(){
     cells.forEach (x => {
